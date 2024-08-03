@@ -1,0 +1,13 @@
+[package]
+name = "obsrename"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+log = "0.4.22"
+obws = "0.12.0"
+simplelog = "0.12.2"
+tokio = { version = "1.39.2", features = ["full"] }
+tray-icon = "0.14.3"
+winapi ={ version = "0.3.9", features = ["winuser", "libloaderapi"] }
+lazy_static = "1.4.0"

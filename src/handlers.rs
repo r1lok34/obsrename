@@ -96,6 +96,13 @@ pub async fn handle_event(e: Action, client: Option<&Client>) -> Result<(), Erro
                     .spawn()
                     .unwrap();
             }
+            Program::Telegram => {
+                warn!("opening Telegram");
+                let _ = Command::new("powershell")
+                    .arg("start")
+                    .arg(r#"C:\Users\aszqm\AppData\Roaming\"Telegram Desktop"\Telegram.exe"#)
+                    .spawn();
+            }
             Program::None => {}
         },
         Action::Power(p) => match p {
@@ -213,6 +220,9 @@ fn handle_buffer() {
                     68 => {
                         symbol = Symbols::RightArrow;
                     }
+                    84 => {
+                        symbol = Symbols::Tire;
+                    }
                     _ => {}
                 }
             }
@@ -259,7 +269,17 @@ fn handle_buffer() {
                         prog = Program::Calculator;
                     }
                     84 => {
-                        prog = Program::Terminal;
+                        if b.len() > 2 {
+                            match b[2] {
+                                49 => {
+                                    prog = Program::Terminal;
+                                }
+                                50 => {
+                                    prog = Program::Telegram;
+                                }
+                                _ => {}
+                            }
+                        }
                     }
                     78 => {
                         prog = Program::Notepad;
@@ -354,6 +374,7 @@ pub fn type_symbol(key: Symbols) {
         Symbols::Heart => '♥'.into(),
         Symbols::LeftArrow => '←'.into(),
         Symbols::RightArrow => '→'.into(),
+        Symbols::Tire => '–'.into(),
         Symbols::None => return,
     };
 

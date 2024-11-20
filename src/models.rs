@@ -58,6 +58,7 @@ pub enum Symbols {
     Heart,
     LeftArrow,
     RightArrow,
+    Tire,
     None
 }
 
@@ -72,6 +73,7 @@ pub enum Program {
     Calculator,
     Terminal,
     Notepad,
+    Telegram,
     None
 }
 

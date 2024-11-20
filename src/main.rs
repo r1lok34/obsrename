@@ -1,3 +1,4 @@
+// #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::sync::Mutex;
 
 use handlers::handle_event;
@@ -14,6 +15,7 @@ use windows::keyboard_listener::start_keyboard_hook;
 
 mod handlers;
 mod models;
+mod tray;
 mod windows;
 
 lazy_static::lazy_static! {
@@ -66,6 +68,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .send(Action::Content(ContentType::default()));
         SENDER.lock().unwrap().send(Action::Close).unwrap();
     });
+
+    // let mut sys_tray = tray::tray_init();
 
     start_keyboard_hook();
 

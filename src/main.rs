@@ -3,7 +3,7 @@ use std::sync::Mutex;
 
 use handlers::handle_event;
 use models::{Action, ContentType};
-use obws::Client;
+// use obws::Client;
 use simplelog::{CombinedLogger, Config, LevelFilter, TermLogger};
 use tokio::{
     signal,
@@ -52,13 +52,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     *SENDER.lock().unwrap() = tx.clone();
 
-    let client = match Client::connect("192.168.0.108", 4455, Some("ABOCDPCyssl3CKFN")).await {
-        Ok(c) => Some(c),
-        Err(e) => {
-            error!("OBS might not be connected: {:?}", e);
-            None
-        }
-    };
+    // let client = match Client::connect("192.168.0.108", 4455, Some("ABOCDPCyssl3CKFN")).await {
+    //     Ok(c) => Some(c),
+    //     Err(e) => {
+    //         error!("OBS might not be connected: {:?}", e);
+    //         None
+    //     }
+    // };
 
     let _ = tokio::spawn(async move {
         signal::ctrl_c().await.expect("failed to listen for event");
@@ -76,7 +76,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     loop {
         match rx.recv().await {
             Some(e) => {
-                if let Err(err) = handle_event(e, client.as_ref()).await {
+                if let Err(err) = handle_event(e).await {
                     match err {
                         handlers::Error::OBSNotConnected => {
                             error!("OBS not connected. Skipping this event.");

@@ -1,7 +1,7 @@
 use std::process::Command;
 
 use log::{error, warn};
-use obws::Client;
+// use obws::Client;
 use winapi::um::{
     wingdi::{DEVMODEW, DM_PELSHEIGHT, DM_PELSWIDTH},
     winuser::{ChangeDisplaySettingsW, CDS_UPDATEREGISTRY, DISP_CHANGE_SUCCESSFUL},
@@ -14,7 +14,7 @@ use crate::{
     Action, KEYBUFFER, KEYLOCK, SENDER,
 };
 
-const NORMAL_DIRECTORY: &'static str = r#"D:\Records"#;
+// const NORMAL_DIRECTORY: &'static str = r#"D:\Records"#;
 
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
@@ -25,9 +25,9 @@ pub enum Error {
     OBSError(String),
 }
 
-pub async fn handle_event(e: Action, client: Option<&Client>) -> Result<(), Error> {
+pub async fn handle_event(e: Action) -> Result<(), Error> {
     match e {
-        Action::Content(content_type) => change_recording_folder(content_type, client).await?,
+        Action::Content(_content_type) => {},    //change_recording_folder(content_type, client).await?,
         Action::Close => {
             warn!("closing");
             return Err(Error::Close);
@@ -327,44 +327,44 @@ fn set_resolution(x: u32, y: u32) -> Result<(), Error> {
     }
 }
 
-pub async fn change_recording_folder(
-    content: ContentType,
-    client: Option<&Client>,
-) -> Result<(), Error> {
-    let mut path = String::new();
+// pub async fn change_recording_folder(
+//     content: ContentType,
+//     client: Option<&Client>,
+// ) -> Result<(), Error> {
+//     let mut path = String::new();
 
-    match content.game {
-        Game::None => {
-            warn!("set to norm");
-            path.push_str(NORMAL_DIRECTORY);
-        }
-        Game::Valorant => {
-            warn!("set to comp");
-            path = format!("{}\\Valorant", NORMAL_DIRECTORY);
-        }
-        _ => {}
-    }
+//     match content.game {
+//         Game::None => {
+//             warn!("set to norm");
+//             path.push_str(NORMAL_DIRECTORY);
+//         }
+//         Game::Valorant => {
+//             warn!("set to comp");
+//             path = format!("{}\\Valorant", NORMAL_DIRECTORY);
+//         }
+//         _ => {}
+//     }
 
-    match content.mode {
-        GameMode::Competitive => {
-            path.push_str("\\Competitive");
-        }
-        GameMode::Deathmatch => {
-            path.push_str("\\Deathmatch");
-        }
-        _ => {}
-    }
+//     match content.mode {
+//         GameMode::Competitive => {
+//             path.push_str("\\Competitive");
+//         }
+//         GameMode::Deathmatch => {
+//             path.push_str("\\Deathmatch");
+//         }
+//         _ => {}
+//     }
 
-    return if let Some(c) = client {
-        if let Err(e) = c.config().set_record_directory(&path).await {
-            Err(Error::OBSError(e.to_string()))
-        } else {
-            Ok(())
-        }
-    } else {
-        return Err(Error::OBSNotConnected);
-    };
-}
+//     return if let Some(c) = client {
+//         if let Err(e) = c.config().set_record_directory(&path).await {
+//             Err(Error::OBSError(e.to_string()))
+//         } else {
+//             Ok(())
+//         }
+//     } else {
+//         return Err(Error::OBSNotConnected);
+//     };
+// }
 
 pub fn type_symbol(key: Symbols) {
     let symbol: u32 = match key {
